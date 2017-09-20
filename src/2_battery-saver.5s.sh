@@ -12,24 +12,36 @@ MIN_BATTERY_LEVEL=40
 MAX_BATTERY_LEVEL=80
 
 
-battery_level=$(ioreg -n AppleSmartBattery -r | awk '$1~/Capacity/{c[$1]=$3} END{OFMT="%.0f"; max=c["\"MaxCapacity\""]; print (max>0? 100*c["\"CurrentCapacity\""]/max: "?")}')
-battery_is_charging=$(ioreg -n AppleSmartBattery -r | grep 'IsCharging' | awk '{print $3}')
-# time_remaining=$(ioreg -n AppleSmartBattery -r | grep 'TimeRemaining' | awk '{print $3}')
-time_remaining=( $(pmset -g batt | awk -F";" 'FNR == 2 {print $3}') )
+BATTERY_DISCHARGING_SEARCH_TERM="discharging"
+
+
+battery_info=$(pmset -g batt | egrep "([0-9]+\%).*" -o)
+
+
+battery_level=$(echo $battery_info | cut -f1 -d';' | grep -o '[0-9]\+')
+battery_remaining_time=$(echo $battery_info | grep -oE '[0-9]+\:[0-9]{2}')
+is_battery_charging="yes"
+
+if echo "$battery_info" | grep -q "$BATTERY_DISCHARGING_SEARCH_TERM";
+then
+    is_battery_charging="no";
+fi
+
 
 # Testing
 # battery_level=39
-# battery_is_charging="No"
+# battery_remaining_time=""
+# battery_charging_status="charging"
+# battery_charging_status="discharging"
 
 
-if [ "$time_remaining" = "(no" ]; then time_remaining="..."; fi
+if [ "$battery_remaining_time" = "" ]; then battery_remaining_time="..."; fi
 
-
-if [ "$battery_is_charging" = "Yes" ]
+if [ "$is_battery_charging" = "yes" ];
 then
 	status_icon="↑"
 
-	if [ "$battery_level" -ge "$MAX_BATTERY_LEVEL" ]
+	if [ "$battery_level" -ge "$MAX_BATTERY_LEVEL" ];
 		then
 			status_icon="✓"
 	fi
@@ -37,7 +49,7 @@ then
 else
 	status_icon="↓"
 
-	if [ "$battery_level" -le "$MIN_BATTERY_LEVEL" ]
+	if [ "$battery_level" -le "$MIN_BATTERY_LEVEL" ];
 		then
 			status_icon="✕"
 	fi
@@ -45,5 +57,4 @@ else
 fi
 
 
-
-echo -e "$battery_level$status_icon$time_remaining | size=12"
+echo -e "$battery_level$status_icon($battery_remaining_time) | size=12"
