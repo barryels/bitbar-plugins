@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        .example {
+            text-align: center;
+            padding: 1em;
+        }
+
+        .pie {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #fff;
+            background-image: linear-gradient(to right, transparent 50%, #000 0);
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .pie::before {
+            content: '';
+            display: block;
+            margin-left: 50%;
+            height: 100%;
+            border-radius: 0 100% 100% 0 / 50%;
+            background-color: inherit;
+            transform-origin: left;
+        }
+
+        .pie::after {
+            content: "";
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            margin: auto;
+            border-radius: 50%;
+            background-color: #fff;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            text-align: center;
+            font: 900 20px/41px Tahoma;
+        }
+
+        @for $i from 0 through 50 {
+            .pie[data-value="#{$i}"]:before {
+                transform: rotate(#{$i/100}turn);
+            }
+        }
+
+        @for $i from 51 through 100 {
+            .pie[data-value="#{$i}"]:before {
+                background-color: #000;
+                transform: rotate(#{$i/100 - .5}turn);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="example">
+        <div class="pie" data-value="10"></div>
+        <div class="pie" data-value="20"></div>
+        <div class="pie" data-value="30"></div>
+        <div class="pie" data-value="40"></div>
+        <div class="pie" data-value="50"></div>
+        <div class="pie" data-value="60"></div>
+        <div class="pie" data-value="70"></div>
+        <div class="pie" data-value="80"></div>
+        <div class="pie" data-value="90"></div>
+        <div class="pie" data-value="100"></div>
+    </div>
+
+    <script>
+        // .pie[data-value="80"]:before {
+        //     transform: rotate(80/100);
+        // }
+        var styleTag = document.createElement('style');
+        var pieList = document.getElementsByClassName('pie');
+
+        Array.prototype.forEach.call(pieList, function (item) {
+            var value = Number(item.getAttribute('data-value'));
+            var style = 'transform: rotate(' + (value / 100) + 'turn);';
+
+            if (value > 50) {
+                style = 'transform: rotate(' + (value / (100) - 0.5) + 'turn); background-color: #000;';
+            }
+            styleTag.innerText += '.pie[data-value="' + value + '"]:before { ' + style + ' }';
+        });
+
+        document.head.appendChild(styleTag);
+
+        // no JS is required this is just to duplicate the pies
+        // var i = 0;
+        // while (i < 101) {
+        //     duplicatePies(i);
+        //     i++
+        // }
+
+        // function duplicatePies(i) {
+        //     var el = document.createElement("div");
+        //     el.setAttribute('data-value', i);
+        //     el.className = "pie";
+        //     document.body.appendChild(el);
+        // }
+    </script>
+
+</body>
+
+</html>
