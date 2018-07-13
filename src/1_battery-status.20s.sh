@@ -5,7 +5,7 @@
 # <bitbar.author>Barry Els</bitbar.author>
 # <bitbar.author.github>barryels</bitbar.author.github>
 # <bitbar.desc>Displays minimal battery information and highlights when to unplug / plug in AC power to keep your battery in the 40% - 80% range.</bitbar.desc>
-# <bitbar.image>http://i.imgur.com/h2cyuYu.png</bitbar.image>
+# <bitbar.image>https://barryels.github.io/bitbar-plugins/src/battery-status/image.png</bitbar.image>
 
 
 MIN_BATTERY_LEVEL=40
