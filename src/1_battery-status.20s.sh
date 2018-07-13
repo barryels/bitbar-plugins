@@ -27,6 +27,8 @@ then
     is_battery_charging="no";
 fi
 
+TRACKPAD_BATTERY_PERCENTAGE=$(ioreg -n BNBTrackpadDevice | fgrep BatteryPercent | fgrep -v \{ | sed 's/[^[:digit:]]//g')
+
 
 # Testing
 # battery_level=39
@@ -58,3 +60,6 @@ fi
 
 
 echo -e "$battery_level$status_icon($battery_remaining_time) | size=12"
+if [ "$TRACKPAD_BATTERY_PERCENTAGE" ]; then
+	echo "Trackpad: $TRACKPAD_BATTERY_PERCENTAGE%"
+fi
