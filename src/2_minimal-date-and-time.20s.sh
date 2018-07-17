@@ -33,9 +33,10 @@ then
 fi
 
 
-date_and_time="$(date '+%H:%M') ($(date '+%d/%m'))"
+date="$(date '+%d/%m')"
+time="$(date '+%H:%M')"
 
-echo -e "$date_and_time${STYLE_CLEAR} ${STYLE_CLEAR} | size=12"
+echo -e "${COLOUR_GREEN}$time${STYLE_CLEAR} ${STYLE_DEFAULT_TEXT}($date)${STYLE_CLEAR} | size=12"
 
 echo "---"
 
