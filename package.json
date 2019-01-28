@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "dev": "nodemon --watch src --ext php sh --exec 'cd src/ && ./2_minimal-date-and-time.20s.sh'",
+    "dev": "nodemon --watch src --ext php sh --exec 'cd src/ && ./3_pomodoro-timer.1s.sh'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

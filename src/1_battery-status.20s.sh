@@ -20,6 +20,7 @@ battery_info=$(pmset -g batt | egrep "([0-9]+\%).*" -o)
 
 battery_level=$(echo $battery_info | cut -f1 -d';' | grep -o '[0-9]\+')
 battery_remaining_time=$(echo $battery_info | grep -oE '[0-9]+\:[0-9]{2}')
+battery_remaining_time="($battery_remaining_time)"
 is_battery_charging="yes"
 
 if echo "$battery_info" | grep -q "$BATTERY_DISCHARGING_SEARCH_TERM";
@@ -36,8 +37,11 @@ TRACKPAD_BATTERY_PERCENTAGE=$(ioreg -n BNBTrackpadDevice | fgrep BatteryPercent 
 # battery_charging_status="charging"
 # battery_charging_status="discharging"
 
+# icon_lightning_bolt="⚡"
 
-if [ "$battery_remaining_time" = "" ]; then battery_remaining_time="..."; fi
+
+if [ "$battery_remaining_time" = "()" ]; then battery_remaining_time="..."; fi
+if [ "$battery_remaining_time" = "(0:00)" ]; then battery_remaining_time=""; fi
 
 if [ "$is_battery_charging" = "yes" ];
 then
@@ -59,7 +63,7 @@ else
 fi
 
 
-echo -e "$battery_level$status_icon($battery_remaining_time) | size=12"
+echo -e "$battery_level$status_icon $battery_remaining_time | size=12"
 if [ "$TRACKPAD_BATTERY_PERCENTAGE" ]; then
 	echo "Trackpad: $TRACKPAD_BATTERY_PERCENTAGE%"
 fi

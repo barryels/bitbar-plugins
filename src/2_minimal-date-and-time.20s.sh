@@ -33,16 +33,85 @@ then
 fi
 
 
-date="$(date '+%d/%m')"
+dayOfMonth=$(date +%Oe | sed 's/ //')
+# dayOfMonth="1"
+# dayOfMonth="2"
+# dayOfMonth="3"
+# dayOfMonth="4"
+# dayOfMonth="11"
+# dayOfMonth="21"
+# dayOfMonth="22"
+# dayOfMonth="23"
+# dayOfMonth="24"
+
+dayOfMonthLength=${#dayOfMonth}
+
+# Handle most numbers
+case "${dayOfMonth:dayOfMonthLength-1:1}" in
+    1)
+    postfix="st"
+    ;;
+    2)
+    postfix="nd"
+    ;;
+    3)
+    postfix="rd"
+    ;;
+    *)
+    postfix="th"
+    ;;
+esac
+
+# Handle numbers starting with "1"
+case "${dayOfMonth:0:1}" in
+    1)
+    postfix="th"
+    ;;
+esac
+
+dayOfMonth=$dayOfMonth$postfix
+month=$(date +%b)
+# date="$(date '+%m-%d')"
 time="$(date '+%H:%M')"
 
-echo -e "${COLOUR_GREEN}$time${STYLE_CLEAR} ${STYLE_DEFAULT_TEXT}($date)${STYLE_CLEAR} | size=12"
+echo -e "${COLOUR_GREEN}$time${STYLE_CLEAR} ${STYLE_DEFAULT_TEXT}$dayOfMonth $month${STYLE_CLEAR} | size=12"
 
 echo "---"
 
+echo "$(date '+%l:%M:%S %p')"
 echo "$(date '+%A, %d %B %Y')"
 echo "Day $(date '+%j')"
 echo "Week $(date '+%W')"
+
+echo "---"
+
+year=$(date +%Y)
+calendar_font_family="Menlo"
+color="white"
+calendar_font_size="11"
+previous_month_color="white"
+next_month_color="white"
+last_m=$(date -v-1m +%m)
+last_m_name=$(date -jf %Y-%m-%d "$year"-"$last_m"-01 '+%b')
+next_m=$(date -v+1m +%m)
+next_m_name=$(date -jf %Y-%m-%d "$year"-"$next_m"-01 '+%b')
+
+#Uncomment the below line and comment out all other following lines to trigger the three-month mode
+# cal -3 |awk 'NF'|sed 's/ $//' |while IFS= read -r i; do echo " $i|trim=false font=$calendar_font_family size=$calendar_font_size color=$color"|  perl -pe '$b="\b";s/ _$b(\d)_$b(\d) /(\1\2)/' |perl -pe '$b="\b";s/_$b _$b(\d) /(\1)/'  ; done
+
+echo "---"
+
+cal | awk 'NF' | sed 's/ $//' | while IFS= read -r i; do echo " $i|trim=false font=$calendar_font_family size=$calendar_font_size color=$color" | perl -pe '$b="\b";s/ _$b(\d)_$b(\d) /(\1\2)/' | perl -pe '$b="\b";s/_$b _$b(\d) /(\1)/'; done
+
+echo "---"
+
+# Previous Month
+echo "Last Month: $last_m_name, $year|trim=false"
+cal -d "$year"-"$last_m" | awk 'NF' | sed 's/ *$//'| while IFS= read -r i; do echo "--$i|trim=false font=$calendar_font_family size=$calendar_font_size color=$previous_month_color"; done 
+
+# Next Month
+echo "Next Month: $next_m_name, $year|trim=false"
+cal -d "$year"-"$next_m" | awk 'NF' | sed 's/ *$//' | while IFS= read -r i; do echo "--$i|trim=false font=$calendar_font_family size=$calendar_font_size color=$next_month_color";done
 
 echo "---"
 
