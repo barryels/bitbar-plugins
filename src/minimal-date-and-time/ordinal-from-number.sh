@@ -9,19 +9,15 @@ numberLength=${#number}
 # Handle most numbers
 case "${number:numberLength-1:1}" in
     1)
-    # echo "1)"
     postfix="st"
     ;;
     2)
-    # echo "2)"
     postfix="nd"
     ;;
     3)
-    # echo "3)"
     postfix="rd"
     ;;
     *)
-    # echo "*)"
     postfix="th"
     ;;
 esac
