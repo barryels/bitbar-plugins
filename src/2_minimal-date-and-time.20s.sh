@@ -81,7 +81,7 @@ echo "---"
 echo "$(date '+%l:%M:%S %p')"
 echo "$(date '+%A, %d %B %Y')"
 echo "Day $(date '+%j')"
-echo "Week $(date '+%W')"
+echo "Week $(date '+%V')"
 
 echo "---"
 
