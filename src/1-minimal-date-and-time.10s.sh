@@ -74,7 +74,8 @@ month=$(date +%b)
 # date="$(date '+%m-%d')"
 time="$(date '+%H:%M')"
 
-echo -e "${COLOUR_GREEN}$time${STYLE_CLEAR} ${STYLE_DEFAULT_TEXT}$dayOfMonth $month${STYLE_CLEAR} | size=12"
+# echo -e "${COLOUR_GREEN}$time${STYLE_CLEAR} ${STYLE_DEFAULT_TEXT}$dayOfMonth $month${STYLE_CLEAR} | size=12"
+echo -e "${STYLE_DEFAULT_TEXT}$time $dayOfMonth $month${STYLE_CLEAR} | size=12"
 
 echo "---"
 
@@ -112,6 +113,7 @@ cal -d "$year"-"$last_m" | awk 'NF' | sed 's/ *$//'| while IFS= read -r i; do ec
 # Next Month
 echo "Next Month: $next_m_name, $year|trim=false"
 cal -d "$year"-"$next_m" | awk 'NF' | sed 's/ *$//' | while IFS= read -r i; do echo "--$i|trim=false font=$calendar_font_family size=$calendar_font_size color=$next_month_color";done
+# cal -d "$year"-"$next_m" | awk '{ print " "$0; getline; print " Mo Tu We Th Fr Sa Su"; getline; if (substr($0,1,2) == " 1") print "                    1 "; do { prevline=$0; if (getline == 0) exit; print " " substr(prevline,4,17) " " substr($0,1,2) " "; } while (1) }'; done
 
 echo "---"
 
