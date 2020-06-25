@@ -29,12 +29,14 @@ BATTERY_DISCHARGING_SEARCH_TERM="discharging"
 
 
 battery_info=$(pmset -g batt | egrep "([0-9]+\%).*" -o)
-
+more_info=$(system_profiler SPPowerDataType)
 
 battery_level=$(echo $battery_info | cut -f1 -d';' | grep -o '[0-9]\+')
 battery_remaining_time=$(echo $battery_info | grep -oE '[0-9]+\:[0-9]{2}')
 battery_remaining_time="($battery_remaining_time)"
 is_battery_charging="yes"
+cycle_count=$(echo "$more_info" | grep "Cycle Count" | awk '{print $3}')
+wattage=$(echo "$more_info" | grep "Wattage (W)" | awk '{print $3}')
 
 if echo "$battery_info" | grep -q "$BATTERY_DISCHARGING_SEARCH_TERM";
 then
@@ -72,10 +74,15 @@ if [ "$is_battery_charging" = "yes" ];
 fi
 
 
-prefx="${COLOUR_GREEN}$battery_level$suffix"
+prefix="${COLOUR_GREEN}$battery_level$suffix"
 suffix="${STYLE_CLEAR}${STYLE_DEFAULT_TEXT} $status_icon $battery_remaining_time${STYLE_CLEAR} | size=12"
 
-if [ "$battery_level" -lt "$MIN_BATTERY_LEVEL" ]; then prefx="${COLOUR_RED}$battery_level$suffix"; fi
-if [ "$battery_level" -eq 100 ]; then prefx="${STYLE_CLEAR}${STYLE_DEFAULT_TEXT}$battery_level$suffix"; fi
+if [ "$battery_level" -lt "$MIN_BATTERY_LEVEL" ]; then prefix="${COLOUR_RED}$battery_level$suffix"; fi
+if [ "$battery_level" -eq 100 ]; then prefix="${STYLE_CLEAR}${STYLE_DEFAULT_TEXT}$battery_level$suffix"; fi
 
-echo -e "${prefx}${suffix}"
+echo -e "${prefix}${suffix}"
+
+echo "---"
+
+echo "Cycle Count: ${cycle_count}"
+echo "Wattage: ${wattage}"

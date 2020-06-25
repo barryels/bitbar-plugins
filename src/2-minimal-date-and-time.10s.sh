@@ -69,13 +69,15 @@ case "${dayOfMonth:0:1}" in
     ;;
 esac
 
+dayOfWeek=$(date +%a)
+dayOfWeekShortened=$(echo $dayOfWeek | head -c 2)
 dayOfMonth=$dayOfMonth$postfix
 month=$(date +%b)
 # date="$(date '+%m-%d')"
 time="$(date '+%H:%M')"
 
 # echo -e "${COLOUR_GREEN}$time${STYLE_CLEAR} ${STYLE_DEFAULT_TEXT}$dayOfMonth $month${STYLE_CLEAR} | size=12"
-echo -e "${STYLE_DEFAULT_TEXT}$time $dayOfMonth $month${STYLE_CLEAR} | size=12"
+echo -e "${STYLE_DEFAULT_TEXT}$time $dayOfWeekShortened $dayOfMonth $month${STYLE_CLEAR} | size=12"
 
 echo "---"
 
