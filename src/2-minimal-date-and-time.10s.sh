@@ -104,7 +104,21 @@ next_m_name=$(date -jf %Y-%m-%d "$year"-"$next_m"-01 '+%b')
 
 echo "---"
 
+# cal | awk 'NF' | sed 's/ $//' | while IFS= read -r i; do echo " $i|trim=false font=$calendar_font_family size=$calendar_font_size color=$color" | perl -pe '$b="\b";s/ _$b(\d)_$b(\d) /(\1\2)/' | perl -pe '$b="\b";s/_$b _$b(\d) /(\1)/'; done
 cal | awk 'NF' | sed 's/ $//' | while IFS= read -r i; do echo " $i|trim=false font=$calendar_font_family size=$calendar_font_size color=$color" | perl -pe '$b="\b";s/ _$b(\d)_$b(\d) /(\1\2)/' | perl -pe '$b="\b";s/_$b _$b(\d) /(\1)/'; done
+# cal | awk '{ \
+#   print " "$0; \
+#   getline; \
+#   print " Mo Tu We Th Fr Sa Su"; \
+#   getline; \
+#   if (substr($0,1,2) == " 1") print "                    1 "; \
+#   do { \
+#     prevline=$0; \
+#     if (getline == 0) exit; \
+#     print " " substr(prevline,4,17) " " substr($0,1,2) " "; \
+#   } \
+#   while (1) \
+# }'
 
 echo "---"
 
